@@ -1,0 +1,78 @@
+{
+  "name": "@vime/core",
+  "version": "0.0.0",
+  "description": "Customizable, extensible, accessible and framework agnostic media player.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14"
+  },
+  "sideEffects": false,
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "@types/",
+  "files": [
+    "dist/",
+    "@types/",
+    "vscode.html-data.json",
+    "icons/",
+    "themes/"
+  ],
+  "contributors": [
+    "Rahim Alwer <rahim_alwer@outlook.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/@vime-js/vime.git"
+  },
+  "bugs": {
+    "url": "https://github.com/@vime-js/vime/issues"
+  },
+  "scripts": {
+    "build": "run-s clean build:cjs build:esm",
+    "build:cjs": "tsc -m commonjs --outDir dist/cjs -p tsconfig-lit.json",
+    "build:esm": "tsc -m es6 --outDir dist/esm -p tsconfig-lit.json",
+    "build:watch": "npm run build:esm -- -w",
+    "build:themes": "run-s min:theme*",
+    "clean": "rimraf dist && rimraf @types && rimraf themes/*",
+    "min:theme.default": "cleancss -o themes/default.css src/themes/default.css",
+    "min:theme.light": "cleancss -o themes/light.css src/themes/light.css",
+    "lint": "run-s lint:*",
+    "lint:analyzer": "lit-analyzer src/**/*.ts",
+    "lint:eslint": "eslint **/*.ts --quiet --fix --ignore-path .gitignore",
+    "lint:prettier": "prettier . --write --ignore-path .gitignore --loglevel warn",
+    "release": "npx semantic-release --branches main",
+    "serve": "wds",
+    "test": "wtr \"src/**/*.test.ts\" --coverage",
+    "test:watch": "wtr \"src/**/*.test.ts\" --watch"
+  },
+  "dependencies": {
+    "@wcom/events": "^1.0.0",
+    "clsx": "^1.1.1",
+    "lit-element": "^2.0.0"
+  },
+  "devDependencies": {
+    "@open-wc/testing": "^2.5.32",
+    "@types/mocha": "^8.0.3",
+    "@types/sinon": "^9.0.8",
+    "@typescript-eslint/eslint-plugin": "^4.11.1",
+    "@typescript-eslint/parser": "^4.11.1",
+    "@web/dev-server": "^0.0.19",
+    "@web/dev-server-esbuild": "^0.2.6",
+    "@web/test-runner": "^0.9.7",
+    "clean-css-cli": "^4.3.0",
+    "eslint": "^7.8.1",
+    "eslint-config-airbnb-typescript": "^12.0.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-import": "^2.22.0",
+    "lit-analyzer": "^1.2.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "2.2.1",
+    "rimraf": "^3.0.2",
+    "sinon": "^9.2.1",
+    "typescript": "^4.0.2"
+  },
+  "publishConfig": {
+    "tag": "next",
+    "access": "public"
+  }
+}
