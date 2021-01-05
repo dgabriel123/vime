@@ -18,15 +18,6 @@
     "module": "es2015",
     "target": "es2017"
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.js",
-    "**/*.cjs",
-    "**/*.mjs",
-  ],
-  "exclude": [
-    "docs/**",
-    "node_modules/**"
-  ]
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.cjs", "**/*.mjs"],
+  "exclude": ["docs/**", "node_modules/**"]
 }

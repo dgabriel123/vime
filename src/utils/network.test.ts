@@ -1,8 +1,15 @@
 import { expect } from '@open-wc/testing';
 import {
-  appendParamsToURL, decodeJSON, decodeQueryString,
-  isObjOrJSON, objOrParseJSON, parseQueryString, preconnect, serializeQueryString,
-  tryDecodeURIComponent, tryParseJSON,
+  appendParamsToURL,
+  decodeJSON,
+  decodeQueryString,
+  isObjOrJSON,
+  objOrParseJSON,
+  parseQueryString,
+  preconnect,
+  serializeQueryString,
+  tryDecodeURIComponent,
+  tryParseJSON,
 } from './network';
 
 describe('tryParseJSON', () => {
@@ -69,7 +76,9 @@ describe('decodeJSON', () => {
 
 describe('tryDecodeURIComponent', () => {
   it('should return decoded component given valid component', () => {
-    expect(tryDecodeURIComponent('apple%40bees.com')).to.equal('apple@bees.com');
+    expect(tryDecodeURIComponent('apple%40bees.com')).to.equal(
+      'apple@bees.com'
+    );
   });
 
   it('should return fallback given window is undefined', () => {
@@ -93,12 +102,14 @@ describe('parseQueryString', () => {
 
 describe('serializeQueryString', () => {
   it('should serialize object into query string', () => {
-    expect(serializeQueryString({
-      apples: ['1', '2'],
-      bees: 'wombo',
-      chicken: null as any,
-      dips: undefined as any,
-    })).to.equal('apples=1&apples=2&bees=wombo');
+    expect(
+      serializeQueryString({
+        apples: ['1', '2'],
+        bees: 'wombo',
+        chicken: null as any,
+        dips: undefined as any,
+      })
+    ).to.equal('apples=1&apples=2&bees=wombo');
   });
 });
 
@@ -106,28 +117,36 @@ describe('prefetch', () => {
   it('should append link to document head', () => {
     const url = 'https://example.com';
     preconnect(url);
-    const link = document.head.querySelector(`link[href="${url}"]`) as HTMLLinkElement;
+    const link = document.head.querySelector(
+      `link[href="${url}"]`
+    ) as HTMLLinkElement;
     expect(link.rel).to.equal('preconnect');
   });
 });
 
 describe('appendParamsToURL', () => {
   it('should append params as query string to url', () => {
-    expect(appendParamsToURL('https://example.com', {
-      apples: ['1', '2'],
-      bees: 'wombo',
-    })).to.equal('https://example.com?apples=1&apples=2&bees=wombo');
+    expect(
+      appendParamsToURL('https://example.com', {
+        apples: ['1', '2'],
+        bees: 'wombo',
+      })
+    ).to.equal('https://example.com?apples=1&apples=2&bees=wombo');
   });
 
   it('should return url given empty params', () => {
-    expect(appendParamsToURL('https://apples.com', {})).to.equal('https://apples.com');
+    expect(appendParamsToURL('https://apples.com', {})).to.equal(
+      'https://apples.com'
+    );
   });
 
   it('should append params successfully given url already has query string', () => {
-    expect(appendParamsToURL('https://example.com?chicken=3', {
-      apples: ['1', '2'],
-      bees: 'wombo',
-    })).to.equal('https://example.com?chicken=3&apples=1&apples=2&bees=wombo');
+    expect(
+      appendParamsToURL('https://example.com?chicken=3', {
+        apples: ['1', '2'],
+        bees: 'wombo',
+      })
+    ).to.equal('https://example.com?chicken=3&apples=1&apples=2&bees=wombo');
   });
 });
 

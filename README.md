@@ -55,7 +55,7 @@ Vime is a customizable, extensible, accessible and framework agnostic media play
 
 ## 🍭 Examples
 
-**The examples below are using web components but there are bindings for React, Vue, Svelte, Stencil 
+**The examples below are using web components but there are bindings for React, Vue, Svelte, Stencil
 and Angular. If you want to see how they look check out our [Demo](https://vimejs.com/demo).**
 
 ```html

@@ -2,14 +2,21 @@
 
 import { expect } from '@open-wc/testing';
 import {
-  getConstructor, isArray, isBoolean,
-  isFunction, isInstanceOf, isNull,
-  isNumber, isObject, isPrototypeOf,
-  isString, isUndefined,
+  getConstructor,
+  isArray,
+  isBoolean,
+  isFunction,
+  isInstanceOf,
+  isNull,
+  isNumber,
+  isObject,
+  isPrototypeOf,
+  isString,
+  isUndefined,
 } from './unit';
 
 const expectToBeTrueOnlyFor = (type: string, check: any) => {
-  const inputs: Record<string, { input: any, isValid?: boolean }> = {
+  const inputs: Record<string, { input: any; isValid?: boolean }> = {
     array: { input: [] },
     string: { input: '' },
     noll: { input: null },
@@ -23,8 +30,9 @@ const expectToBeTrueOnlyFor = (type: string, check: any) => {
   inputs[type].isValid = true;
 
   // @ts-ignore
-  Object.values(inputs)
-    .forEach((input) => expect(check(input.input)).to.equal((input as any).isValid || false));
+  Object.values(inputs).forEach((input) =>
+    expect(check(input.input)).to.equal((input as any).isValid || false)
+  );
 };
 
 describe('isArray', () => {

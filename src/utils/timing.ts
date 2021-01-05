@@ -1,6 +1,10 @@
 import { isUndefined } from './unit';
 
-export const debounce = (func: ((...args: any[]) => void), wait = 1000, immediate = false) => {
+export const debounce = (
+  func: (...args: any[]) => void,
+  wait = 1000,
+  immediate = false
+) => {
   let timeout: number | undefined;
 
   return function executedFunction(this: any, ...args: any[]) {

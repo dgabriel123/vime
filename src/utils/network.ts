@@ -1,5 +1,9 @@
 import {
-  isString, isArray, isNullOrUndefined, isObject, isUndefined,
+  isString,
+  isArray,
+  isNullOrUndefined,
+  isObject,
+  isUndefined,
 } from './unit';
 import { IS_CLIENT } from './support';
 
@@ -19,23 +23,26 @@ export function tryParseJSON<T>(json: string): T | undefined {
 /**
  * Check if the given input is json or a plain object.
  */
-export const isObjOrJSON = (input: any): boolean => !isNullOrUndefined(input)
-  && (isObject(input) || (isString(input) && input.startsWith('{')));
+export const isObjOrJSON = (input: any): boolean =>
+  !isNullOrUndefined(input) &&
+  (isObject(input) || (isString(input) && input.startsWith('{')));
 
 /**
  * If an object return otherwise try to parse it as json.
  */
-export const objOrParseJSON = <T>(input: any): T | undefined => (isObject(input)
-  ? input
-  : tryParseJSON(input));
+export const objOrParseJSON = <T>(input: any): T | undefined =>
+  isObject(input) ? input : tryParseJSON(input);
 
 /**
  * Load image avoiding xhr/fetch CORS issues. Server status can't be obtained this way
  * unfortunately, so this uses "naturalWidth" to determine if the image has been loaded. By
  * default it checks if it is at least 1px.
  */
-export const loadImage = (src: string, minWidth = 1): Promise<HTMLImageElement> => new Promise(
-  (resolve, reject) => {
+export const loadImage = (
+  src: string,
+  minWidth = 1
+): Promise<HTMLImageElement> =>
+  new Promise((resolve, reject) => {
     const image = new Image();
     const handler = () => {
       // @ts-ignore
@@ -45,13 +52,12 @@ export const loadImage = (src: string, minWidth = 1): Promise<HTMLImageElement> 
       image.naturalWidth >= minWidth ? resolve(image) : reject(image);
     };
     Object.assign(image, { onload: handler, onerror: handler, src });
-  },
-);
+  });
 
 export const loadScript = (
   src: string,
   onLoad: () => void,
-  onError: (e: any) => void = (() => {}),
+  onError: (e: any) => void = () => {}
 ) => {
   const script = document.createElement('script');
   script.src = src;
@@ -72,7 +78,10 @@ export const decodeJSON = <T>(data: any): T | undefined => {
 /**
  * Attempts to safely decode a URI component, on failure it returns the given fallback.
  */
-export const tryDecodeURIComponent = (component: string, fallback = ''): string => {
+export const tryDecodeURIComponent = (
+  component: string,
+  fallback = ''
+): string => {
   if (!IS_CLIENT) return fallback;
   try {
     return window.decodeURIComponent(component);
@@ -145,7 +154,7 @@ export const serializeQueryString = (params: Params): string => {
 export const preconnect = (
   url: string,
   rel: 'preconnect' | 'prefetch' | 'preload' = 'preconnect',
-  as?: string,
+  as?: string
 ): boolean => {
   if (!IS_CLIENT) return false;
 
@@ -166,20 +175,22 @@ export const preconnect = (
 export const appendQueryStringToURL = (url: string, qs?: string) => {
   if (isUndefined(qs) || qs!.length === 0) return url;
   const mainAndQuery = url.split('?', 2);
-  return mainAndQuery[0]
-    + (!isUndefined(mainAndQuery[1]) ? `?${mainAndQuery[1]}&${qs}` : `?${qs}`);
+  return (
+    mainAndQuery[0] +
+    (!isUndefined(mainAndQuery[1]) ? `?${mainAndQuery[1]}&${qs}` : `?${qs}`)
+  );
 };
 
 /**
  * Serializes the given params into a query string and appends them to the given URL.
  */
-export const appendParamsToURL = (
-  url: string,
-  params: string | Params,
-) => appendQueryStringToURL(
-  url,
-  isObject(params) ? serializeQueryString(params as Params) : (params as string),
-);
+export const appendParamsToURL = (url: string, params: string | Params) =>
+  appendQueryStringToURL(
+    url,
+    isObject(params)
+      ? serializeQueryString(params as Params)
+      : (params as string)
+  );
 
 /**
  * Tries to convert a query string into a object.
@@ -194,14 +205,17 @@ export const decodeQueryString = <T>(qs: string): T | undefined => {
  *
  * @see https://github.com/CookPete/react-player/blob/master/src/utils.js#L77
  */
-type PendingSDKRequest = { resolve: (value?: any) => void, reject: (reason?: any) => void };
+type PendingSDKRequest = {
+  resolve: (value?: any) => void;
+  reject: (reason?: any) => void;
+};
 const pendingSDKRequests: Record<string, PendingSDKRequest[]> = {};
 export const loadSDK = <SDKType = any>(
   url: string,
   sdkGlobalVar: string,
   sdkReadyVar?: string,
-  isLoaded: ((sdk: SDKType) => boolean) = () => true,
-  loadScriptFn = loadScript,
+  isLoaded: (sdk: SDKType) => boolean = () => true,
+  loadScriptFn = loadScript
 ) => {
   const getGlobal = (key: any) => {
     if (!isUndefined(window[key])) return window[key];
@@ -231,27 +245,34 @@ export const loadSDK = <SDKType = any>(
     };
 
     if (!isUndefined(sdkReadyVar)) {
-      const previousOnReady: () => void = window[(sdkReadyVar as any)] as any;
+      const previousOnReady: () => void = window[sdkReadyVar as any] as any;
       // eslint-disable-next-line func-names
-      (window as any)[(sdkReadyVar as any)] = function () {
+      (window as any)[sdkReadyVar as any] = function () {
         if (!isUndefined(previousOnReady)) previousOnReady();
         onLoaded(getGlobal(sdkGlobalVar));
       };
     }
 
-    loadScriptFn(url, () => {
-      if (isUndefined(sdkReadyVar)) onLoaded(getGlobal(sdkGlobalVar));
-    }, (e) => {
-      pendingSDKRequests[url].forEach((request) => { request.reject(e); });
-      delete pendingSDKRequests[url];
-    });
+    loadScriptFn(
+      url,
+      () => {
+        if (isUndefined(sdkReadyVar)) onLoaded(getGlobal(sdkGlobalVar));
+      },
+      (e) => {
+        pendingSDKRequests[url].forEach((request) => {
+          request.reject(e);
+        });
+        delete pendingSDKRequests[url];
+      }
+    );
   });
 };
 
 export const loadSprite = (src: string, into?: HTMLElement | ShadowRoot) => {
   if (!IS_CLIENT) return;
 
-  window.fetch(src)
+  window
+    .fetch(src)
     .then((res) => res.text())
     .then((sprite) => {
       const div = document.createElement('div');

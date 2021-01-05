@@ -10,5 +10,7 @@ export const formatTime = (seconds = 0, alwaysShowHours = false) => {
   const mins = getMinutes(seconds);
   const secs = getSeconds(seconds);
 
-  return `${(alwaysShowHours || hours > 0) ? `${hours}:` : ''}${format(mins)}:${format(secs)}`;
+  return `${alwaysShowHours || hours > 0 ? `${hours}:` : ''}${format(
+    mins
+  )}:${format(secs)}`;
 };

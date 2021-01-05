@@ -1,37 +1,59 @@
 import { isFunction } from './unit';
 import { listen } from './dom';
 
-export const IS_CLIENT = /* #__PURE__ */typeof window !== 'undefined';
-export const UA = /* #__PURE__ */(IS_CLIENT ? window.navigator?.userAgent.toLowerCase() : '');
-export const IS_IOS = /* #__PURE__ *//iphone|ipad|ipod|ios|CriOS|FxiOS/.test(UA);
-export const IS_ANDROID = /* #__PURE__ *//android/.test(UA);
-export const IS_MOBILE = /* #__PURE__ */(IS_IOS || IS_ANDROID);
-export const IS_IPHONE = /* #__PURE__ */(IS_CLIENT && /(iPhone|iPod)/gi.test(window.navigator?.platform));
-export const IS_FIREFOX = /* #__PURE__ */(/firefox/.test(UA));
-export const IS_CHROME = /* #__PURE__ */(IS_CLIENT && (window as any).chrome);
-export const IS_SAFARI = /* #__PURE__ */(IS_CLIENT && ((window as any).safari || IS_IOS || /Apple/.test(UA)));
+export const IS_CLIENT = /* #__PURE__ */ typeof window !== 'undefined';
+export const UA = /* #__PURE__ */ IS_CLIENT
+  ? window.navigator?.userAgent.toLowerCase()
+  : '';
+export const IS_IOS = /* #__PURE__ */ /iphone|ipad|ipod|ios|CriOS|FxiOS/.test(
+  UA
+);
+export const IS_ANDROID = /* #__PURE__ */ /android/.test(UA);
+export const IS_MOBILE = /* #__PURE__ */ IS_IOS || IS_ANDROID;
+export const IS_IPHONE =
+  /* #__PURE__ */ IS_CLIENT &&
+  /(iPhone|iPod)/gi.test(window.navigator?.platform);
+export const IS_FIREFOX = /* #__PURE__ */ /firefox/.test(UA);
+export const IS_CHROME = /* #__PURE__ */ IS_CLIENT && (window as any).chrome;
+export const IS_SAFARI =
+  /* #__PURE__ */ IS_CLIENT &&
+  ((window as any).safari || IS_IOS || /Apple/.test(UA));
 
-export const ORIGIN = (window.location.protocol !== 'file:')
-  ? `${window.location.protocol}//${window.location.hostname}`
-  : undefined;
+export const ORIGIN =
+  window.location.protocol !== 'file:'
+    ? `${window.location.protocol}//${window.location.hostname}`
+    : undefined;
 
-export type WebKitPresentationMode = 'picture-in-picture' | 'inline' | 'fullscreen';
+export type WebKitPresentationMode =
+  | 'picture-in-picture'
+  | 'inline'
+  | 'fullscreen';
 
 export const onTouchInputChange = (callback: (isTouch: boolean) => void) => {
   if (!IS_CLIENT) return () => {};
 
   let lastTouchTime = 0;
 
-  const offTouchListener = listen(document, 'touchstart', () => {
-    lastTouchTime = new Date().getTime();
-    callback(true);
-  }, true);
+  const offTouchListener = listen(
+    document,
+    'touchstart',
+    () => {
+      lastTouchTime = new Date().getTime();
+      callback(true);
+    },
+    true
+  );
 
-  const offMouseListener = listen(document, 'mousemove', () => {
-    // Filter emulated events coming from touch events
-    if ((new Date().getTime()) - lastTouchTime < 500) return;
-    callback(false);
-  }, true);
+  const offMouseListener = listen(
+    document,
+    'mousemove',
+    () => {
+      // Filter emulated events coming from touch events
+      if (new Date().getTime() - lastTouchTime < 500) return;
+      callback(false);
+    },
+    true
+  );
 
   return () => {
     offTouchListener();
@@ -56,18 +78,18 @@ export const canFullscreenVideo = (): boolean => {
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Screen/orientation
  */
-export const canRotateScreen = () => IS_CLIENT
-  && window.screen.orientation
-  && window.screen.orientation.lock;
+export const canRotateScreen = () =>
+  IS_CLIENT && window.screen.orientation && window.screen.orientation.lock;
 
 /**
  * Reduced motion iOS & MacOS setting.
  *
  * @see https://webkit.org/blog/7551/responsive-design-for-motion/
  */
-export const isReducedMotionPreferred = (): boolean => IS_CLIENT
-  && 'matchMedia' in window
-  && window.matchMedia('(prefers-reduced-motion)').matches;
+export const isReducedMotionPreferred = (): boolean =>
+  IS_CLIENT &&
+  'matchMedia' in window &&
+  window.matchMedia('(prefers-reduced-motion)').matches;
 
 /**
  * Checks if the native HTML5 video player can play HLS.
@@ -102,14 +124,17 @@ export const canUsePiPInSafari = (): boolean => {
   if (!IS_CLIENT) return false;
   const video = document.createElement('video');
   // @ts-ignore
-  return isFunction(video.webkitSupportsPresentationMode)
+  return (
+    isFunction(video.webkitSupportsPresentationMode) &&
     // @ts-ignore
-    && isFunction(video.webkitSetPresentationMode)
-    && !IS_IPHONE;
+    isFunction(video.webkitSetPresentationMode) &&
+    !IS_IPHONE
+  );
 };
 
 // Checks if the native HTML5 video player can enter PIP.
-export const canUsePiP = (): boolean => canUsePiPInChrome() || canUsePiPInSafari();
+export const canUsePiP = (): boolean =>
+  canUsePiPInChrome() || canUsePiPInSafari();
 
 /**
  * To detect autoplay, we create a video element and call play on it, if it is `paused` after
@@ -118,7 +143,10 @@ export const canUsePiP = (): boolean => canUsePiPInChrome() || canUsePiPInSafari
  *
  * @see https://github.com/ampproject/amphtml/blob/9bc8756536956780e249d895f3e1001acdee0bc0/src/utils/video.js#L25
  */
-export const canAutoplay = (muted = true, playsinline = true): Promise<boolean> => {
+export const canAutoplay = (
+  muted = true,
+  playsinline = true
+): Promise<boolean> => {
   if (!IS_CLIENT) return Promise.resolve(false);
 
   const video = document.createElement('video');

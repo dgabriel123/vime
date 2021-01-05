@@ -1,5 +1,5 @@
 export interface DeferredPromise<T> {
-  promise: Promise<T>
+  promise: Promise<T>;
   resolve: (value?: T) => void;
   reject: (reason?: any) => void;
 }
@@ -22,19 +22,19 @@ export interface CancellablePromise<T> extends Promise<T> {
 }
 
 export const cancellablePromise = <T>(
-  promise: Promise<T>,
+  promise: Promise<T>
 ): CancellablePromise<T> => {
   let rejectFn: (reason?: any) => void;
 
   const wrappedPromise: any = new Promise((resolve, reject) => {
     rejectFn = reject;
 
-    Promise.resolve(promise)
-      .then(resolve)
-      .catch(reject);
+    Promise.resolve(promise).then(resolve).catch(reject);
   });
 
-  wrappedPromise.cancel = () => { rejectFn(Error('Cancelled.')); };
+  wrappedPromise.cancel = () => {
+    rejectFn(Error('Cancelled.'));
+  };
 
   return wrappedPromise;
 };

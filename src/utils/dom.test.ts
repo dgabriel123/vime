@@ -4,7 +4,9 @@ import { buildNoAncestorSelector, isColliding, listen } from './dom';
 
 describe('listen', () => {
   it('should attach event listener', async () => {
-    const button = await fixture<HTMLButtonElement>(html`<button>Click</button>`);
+    const button = await fixture<HTMLButtonElement>(
+      html`<button>Click</button>`
+    );
     const handler = spy();
     const off = listen(button, 'click', handler);
     button.click();
@@ -25,7 +27,12 @@ describe('isColliding', () => {
   }
 
   it('should collide', async () => {
-    const el = await fixture(html`<div><div id="a"></div><div id="b"></div></div>`);
+    const el = await fixture(
+      html`<div>
+        <div id="a"></div>
+        <div id="b"></div>
+      </div>`
+    );
     const elA = el.querySelector<HTMLDivElement>('#a')!;
     const elB = el.querySelector<HTMLDivElement>('#b')!;
     position(elA, 0, 0);
