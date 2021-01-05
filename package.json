@@ -46,6 +46,7 @@
     "test:watch": "wtr \"src/**/*.test.ts\" --watch"
   },
   "dependencies": {
+    "@wcom/context": "^2.0.0",
     "@wcom/events": "^1.0.0",
     "clsx": "^1.1.1",
     "lit-element": "^2.0.0"
