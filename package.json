@@ -40,7 +40,7 @@
     "lint:analyzer": "lit-analyzer src/**/*.ts",
     "lint:eslint": "eslint **/*.ts --quiet --fix --ignore-path .gitignore",
     "lint:prettier": "prettier . --write --ignore-path .gitignore --loglevel warn",
-    "release": "npx semantic-release --branches main",
+    "release": "npx semantic-release --branches next",
     "serve": "wds",
     "test": "wtr \"src/**/*.test.ts\" --coverage",
     "test:watch": "wtr \"src/**/*.test.ts\" --watch"
